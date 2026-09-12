@@ -144,6 +144,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Railway CLI local project link
+.railway/
+
 # Spyder project settings
 .spyderproject
 .spyproject

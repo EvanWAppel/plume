@@ -7,12 +7,18 @@ created lazily on first real use.
 
 from __future__ import annotations
 
+import os
 from collections.abc import Iterator
 
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
 DEFAULT_URL = "sqlite:///plume.db"
+
+
+def database_url() -> str:
+    """SQLAlchemy URL. ``PLUME_DATABASE_URL`` overrides the local SQLite file."""
+    return os.getenv("PLUME_DATABASE_URL", DEFAULT_URL)
 
 
 def _import_models() -> None:
@@ -42,9 +48,17 @@ _engine: Engine | None = None
 def get_engine() -> Engine:
     global _engine
     if _engine is None:
-        _engine = make_engine()
+        _engine = make_engine(database_url())
         init_db(_engine)
     return _engine
+
+
+def reset_engine() -> None:
+    """Dispose the cached engine. Tests call this when ``PLUME_DATABASE_URL`` changes."""
+    global _engine
+    if _engine is not None:
+        _engine.dispose()
+        _engine = None
 
 
 def get_session() -> Iterator[Session]:
