@@ -203,6 +203,34 @@ def test_book_page_no_auth_required(web_client: TestClient) -> None:
     assert resp.status_code == 200
 
 
+def test_booking_profiles_match_reservation_eligibility(
+    web_client: TestClient,
+    make_station: Callable[..., Station],
+    make_member: Callable[..., Member],
+) -> None:
+    make_station(name="Open Chair")
+    make_member(name="Active Stylist", email="active@example.com", status=Status.ACTIVE)
+    make_member(name="Prospect Stylist", email="prospect@example.com", status=Status.PROSPECT)
+    make_member(name="Inactive Stylist", email="inactive@example.com", status=Status.INACTIVE)
+
+    resp = web_client.get("/book")
+    assert resp.status_code == 200
+    assert "Active Stylist" in resp.text
+    assert "Prospect Stylist" in resp.text
+    assert "Inactive Stylist" not in resp.text
+
+
+def test_booking_without_members_explains_how_to_get_started(
+    web_client: TestClient, make_station: Callable[..., Station]
+) -> None:
+    make_station(name="Open Chair")
+
+    resp = web_client.get("/book")
+    assert resp.status_code == 200
+    assert "A member profile is needed" in resp.text
+    assert 'type="submit" disabled' in resp.text
+
+
 def test_book_creates_reservation_and_drops_station(
     web_client: TestClient,
     make_member: Callable[..., Member],

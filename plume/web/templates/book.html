@@ -1,54 +1,44 @@
 {% extends "base.html" %}
 {% block title %}plume — book a station{% endblock %}
 {% block content %}
-<section>
-  <h2>Book an available station</h2>
-
-  <form method="get" action="/book" class="inline">
-    <label>Date
-      <input type="date" name="date" value="{{ on_date }}" />
-    </label>
-    <button type="submit">Check availability</button>
+<div class="app-main wrap">
+  <section class="page-intro">
+    <p class="eyebrow">The open studio</p>
+    <h1>A chair for <em>your craft.</em></h1>
+    <p>Pick your day. Find your station. Make a little magic.<br>Flexible space for independent stylists, one day at a time.</p>
+  </section>
+  <form method="get" action="/book" class="date-form">
+    <label for="booking-date">When are you joining us?<input id="booking-date" type="date" name="date" value="{{ on_date }}" required /></label>
+    <button class="button" type="submit">Check availability <span aria-hidden="true">↗</span></button>
   </form>
-</section>
-
-<section id="availability">
-  {% if error %}
-  <p class="error">{{ error }}</p>
-  {% endif %}
-  {% if notice %}
-  <p class="notice">{{ notice }}</p>
-  {% endif %}
-
-  <h3>Available stations on {{ on_date }}</h3>
-  {% if stations %}
-  <table>
-    <thead>
-      <tr><th>Station</th><th>Reserve</th></tr>
-    </thead>
-    <tbody>
+  <section id="availability" aria-labelledby="availability-title" aria-live="polite">
+    {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+    {% if notice %}<p class="notice" role="status">{{ notice }} Your chair is waiting. See you at the studio.</p>{% endif %}
+    <div class="section-title"><h2 id="availability-title">Available stations</h2><span>{{ on_date }} · {{ stations|length }} {{ 'spaces' if stations|length != 1 else 'space' }} available</span></div>
+    {% set eligible_members = members|rejectattr('status.value', 'equalto', 'INACTIVE')|list %}
+    {% if stations %}
+    <div class="booking-grid">
       {% for s in stations %}
-      <tr>
-        <td>{{ s.name }}</td>
-        <td>
-          <form method="post" action="/book" class="inline"
-                hx-post="/book" hx-target="#availability" hx-swap="outerHTML">
-            <input type="hidden" name="station_id" value="{{ s.id }}" />
-            <input type="hidden" name="date" value="{{ on_date }}" />
-            <select name="member_id" required>
-              {% for m in members %}
-              <option value="{{ m.id }}">{{ m.name }}</option>
-              {% endfor %}
-            </select>
-            <button type="submit">Reserve</button>
-          </form>
-        </td>
-      </tr>
+      <article class="station-card">
+        <div class="card-top"><span class="card-number">{{ '%02d'|format(loop.index) }} /</span><span class="tag"><span class="availability-dot" aria-hidden="true"></span>Available</span></div>
+        <h3>{{ s.name }}</h3>
+        <form method="post" action="/book" hx-post="/book" hx-target="#availability" hx-select="#availability" hx-swap="outerHTML" hx-disabled-elt="find button">
+          <input type="hidden" name="station_id" value="{{ s.id }}" />
+          <input type="hidden" name="date" value="{{ on_date }}" />
+          <label for="member-{{ s.id }}">Reserve as</label>
+          <select id="member-{{ s.id }}" name="member_id" required {% if not eligible_members %}disabled{% endif %}>
+            <option value="" disabled selected>Select your member profile</option>
+            {% for m in eligible_members %}<option value="{{ m.id }}">{{ m.name }}</option>{% endfor %}
+          </select>
+          <button class="button button-outline" type="submit" {% if not eligible_members %}disabled{% endif %}>Reserve {{ s.name }} <span aria-hidden="true">↗</span></button>
+        </form>
+      </article>
       {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-  <p>No stations available on {{ on_date }}.</p>
-  {% endif %}
-</section>
+    </div>
+    {% else %}
+    <p class="empty-state">No stations available on {{ on_date }}. Try another date to find your space.</p>
+    {% endif %}
+    {% if not eligible_members %}<p class="booking-help">A member profile is needed to reserve a station. Contact your studio operator to get set up.</p>{% else %}<p class="booking-help">Need a hand with your reservation? Your studio operator can help.</p>{% endif %}
+  </section>
+</div>
 {% endblock %}
