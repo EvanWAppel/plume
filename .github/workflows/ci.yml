@@ -1,0 +1,48 @@
+name: CI
+
+# Checks only — this workflow never deploys, pushes, or merges anything.
+# It runs on every push and on pull requests, and simply gates the branch on
+# lint / typecheck / tests / coverage passing.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: lint · typecheck · test · coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Sync dependencies
+        run: uv sync
+
+      - name: Lint (ruff)
+        run: uv run ruff check .
+
+      - name: Typecheck (ty)
+        run: uv run ty check
+
+      - name: Tests (pytest)
+        run: uv run pytest
+
+      # Coverage gate (X4). Kept OUT of pyproject addopts so a bare
+      # `uv run pytest` stays coverage-free; the gate is opt-in here in CI.
+      # Measured total coverage is ~94% (branch coverage on); the gate sits a
+      # few points below at 88% to allow for minor drift.
+      - name: Coverage gate
+        run: uv run pytest --cov=plume --cov-report=term-missing --cov-fail-under=88
