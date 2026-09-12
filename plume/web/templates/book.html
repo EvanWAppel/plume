@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}plume — book a station{% endblock %}
+{% block content %}
+<section>
+  <h2>Book an available station</h2>
+
+  <form method="get" action="/book" class="inline">
+    <label>Date
+      <input type="date" name="date" value="{{ on_date }}" />
+    </label>
+    <button type="submit">Check availability</button>
+  </form>
+</section>
+
+<section id="availability">
+  {% if error %}
+  <p class="error">{{ error }}</p>
+  {% endif %}
+  {% if notice %}
+  <p class="notice">{{ notice }}</p>
+  {% endif %}
+
+  <h3>Available stations on {{ on_date }}</h3>
+  {% if stations %}
+  <table>
+    <thead>
+      <tr><th>Station</th><th>Reserve</th></tr>
+    </thead>
+    <tbody>
+      {% for s in stations %}
+      <tr>
+        <td>{{ s.name }}</td>
+        <td>
+          <form method="post" action="/book" class="inline"
+                hx-post="/book" hx-target="#availability" hx-swap="outerHTML">
+            <input type="hidden" name="station_id" value="{{ s.id }}" />
+            <input type="hidden" name="date" value="{{ on_date }}" />
+            <select name="member_id" required>
+              {% for m in members %}
+              <option value="{{ m.id }}">{{ m.name }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit">Reserve</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No stations available on {{ on_date }}.</p>
+  {% endif %}
+</section>
+{% endblock %}

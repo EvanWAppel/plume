@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}plume{% endblock %}</title>
+  <script src="https://unpkg.com/htmx.org@2"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 2rem auto; max-width: 900px; padding: 0 1rem; color: #1a1a1a; }
+    header { border-bottom: 1px solid #ddd; margin-bottom: 1.5rem; padding-bottom: 0.75rem; }
+    header a { margin-right: 1rem; text-decoration: none; color: #444; }
+    h1 { margin: 0.25rem 0; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; }
+    th, td { border: 1px solid #e0e0e0; padding: 0.4rem 0.6rem; text-align: left; }
+    th { background: #f6f6f6; }
+    .error { color: #b00020; }
+    .notice { color: #0a7d24; }
+    form.inline { margin: 0; }
+    button, input, select { font-size: 1rem; padding: 0.3rem 0.5rem; }
+    section { margin-bottom: 2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>plume</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/book">Book a station</a>
+      <a href="/login">Login</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

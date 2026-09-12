@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}plume — operator dashboard{% endblock %}
+{% block content %}
+<section>
+  <h2>Members</h2>
+  {% if members %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Email</th><th>Tier</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      {% for m in members %}
+      <tr>
+        <td>{{ m.name }}</td>
+        <td>{{ m.email }}</td>
+        <td>{{ m.tier.value }}</td>
+        <td>{{ m.status.value }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No members yet.</p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>Stations</h2>
+  {% if stations %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Active</th></tr>
+    </thead>
+    <tbody>
+      {% for s in stations %}
+      <tr>
+        <td>{{ s.name }}</td>
+        <td>{{ "yes" if s.active else "no" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No stations yet.</p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>Suites &amp; occupancy</h2>
+  {% if suite_rows %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Monthly rate</th><th>Occupancy</th></tr>
+    </thead>
+    <tbody>
+      {% for row in suite_rows %}
+      <tr>
+        <td>{{ row.suite.name }}</td>
+        <td>{{ "%.2f"|format(row.suite.monthly_rate) }}</td>
+        <td>
+          {% if row.occupant_name %}
+            Occupied by {{ row.occupant_name }}
+          {% elif row.suite.occupant_member_id %}
+            Occupied by member #{{ row.suite.occupant_member_id }}
+          {% else %}
+            Vacant
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No suites yet.</p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>Billing</h2>
+  {% if billing_message %}
+  <p class="notice">{{ billing_message }}</p>
+  {% endif %}
+  <form method="post" action="/dashboard/run-billing" class="inline">
+    <label>Period (YYYY-MM)
+      <input type="text" name="period" placeholder="2026-09" pattern="\d{4}-\d{2}" required />
+    </label>
+    <button type="submit">Run monthly billing</button>
+  </form>
+
+  {% if invoices %}
+  <table>
+    <thead>
+      <tr><th>Member</th><th>Period</th><th>Kind</th><th>Amount</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      {% for inv in invoices %}
+      <tr>
+        <td>{{ inv.member_id }}</td>
+        <td>{{ inv.period }}</td>
+        <td>{{ inv.kind.value }}</td>
+        <td>{{ "%.2f"|format(inv.amount) }}</td>
+        <td>{{ inv.status.value }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</section>
+{% endblock %}
