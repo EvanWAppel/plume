@@ -19,6 +19,7 @@ def _import_models() -> None:
     """Import model modules so their tables register on SQLModel.metadata."""
     from plume.auth import models as _auth  # noqa: F401
     from plume.billing import models as _billing  # noqa: F401
+    from plume.community import models as _community  # noqa: F401
     from plume.members import models as _members  # noqa: F401
     from plume.reservations import models as _reservations  # noqa: F401
     from plume.spaces import models as _spaces  # noqa: F401

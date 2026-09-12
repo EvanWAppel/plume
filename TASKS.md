@@ -112,9 +112,9 @@ Goal: the thinnest end-to-end slice proving the whole pipeline runs — *a styli
 
 ## Group G — Community / cultural hub tooling  (owns `plume/community/`)  — Phase 2
 **Dep:** S8. Lowest priority (PRD frames the hub as a light marketing engine, not core software).
-- [ ] **G1** — `Event` model + CRUD (title, datetime, capacity, RSVP list). _TDD (first): capacity cap enforced on RSVP._
-- [ ] **G2** — `ArtPiece` model for the consignment gallery (artist, title, price, commission %, status `ON_DISPLAY/SOLD`). _TDD (first): selling computes salon commission + artist payout._
-- [ ] **G3** — Public endpoints: upcoming events + current gallery. _TDD: list endpoints._
+- [x] **G1** — `Event` model + CRUD (title, datetime, capacity, RSVP list). _TDD (first): capacity cap enforced on RSVP._
+- [x] **G2** — `ArtPiece` model for the consignment gallery (artist, title, price, commission %, status `ON_DISPLAY/SOLD`). _TDD (first): selling computes salon commission + artist payout._
+- [x] **G3** — Public endpoints: upcoming events + current gallery. _TDD: list endpoints._
 
 ---
 
@@ -134,4 +134,4 @@ S1→S2→S3→S4→S5→S6→S7→S8   (Phase 0, sequential, one agent)
 1. Failing test written first (`uv run pytest` red). 2. Minimal code to green. 3. `ruff` + `ty` clean. 4. Errors are raised, not swallowed. 5. Logging added at decision points. 6. Checkbox flipped to `[x]` with the commit.
 
 ## Progress
-- Phase 0: 8/8 ✅ · X: 5/5 ✅ · A: 5/5 ✅ · B: 5/5 ✅ · C: 5/5 ✅ · D: 5/5 ✅ · E: 5/5 ✅ · F: 4/4 ✅ · G: 0/3
+- Phase 0: 8/8 ✅ · X: 5/5 ✅ · A: 5/5 ✅ · B: 5/5 ✅ · C: 5/5 ✅ · D: 5/5 ✅ · E: 5/5 ✅ · F: 4/4 ✅ · G: 3/3 ✅
