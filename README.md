@@ -31,6 +31,15 @@ uv run uvicorn plume.main:app --reload
 - Interactive API docs (Swagger UI): <http://127.0.0.1:8000/docs>
 - Health check: <http://127.0.0.1:8000/health> → `{"status": "ok"}`
 
+## Deploy (Railway)
+
+Railpack detects FastAPI via the repo-root `main.py` (`uvicorn main:app` on `$PORT`).
+Set these service variables:
+
+- `PLUME_SECRET_KEY` — JWT signing secret, ≥32 bytes. Do not use the dev default.
+- `PLUME_SEED_ON_START=1` — load demo data on boot if missing (operator `rory@plume.test` / `plume-dev`).
+- `PLUME_DATABASE_URL` — optional SQLAlchemy URL; defaults to `sqlite:///plume.db`.
+
 ## Tests, lint, typecheck
 
 ```bash

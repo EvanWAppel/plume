@@ -3,36 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{% block title %}plume{% endblock %}</title>
-  <script src="https://unpkg.com/htmx.org@2"></script>
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 2rem auto; max-width: 900px; padding: 0 1rem; color: #1a1a1a; }
-    header { border-bottom: 1px solid #ddd; margin-bottom: 1.5rem; padding-bottom: 0.75rem; }
-    header a { margin-right: 1rem; text-decoration: none; color: #444; }
-    h1 { margin: 0.25rem 0; }
-    table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; }
-    th, td { border: 1px solid #e0e0e0; padding: 0.4rem 0.6rem; text-align: left; }
-    th { background: #f6f6f6; }
-    .error { color: #b00020; }
-    .notice { color: #0a7d24; }
-    form.inline { margin: 0; }
-    button, input, select { font-size: 1rem; padding: 0.3rem 0.5rem; }
-    section { margin-bottom: 2rem; }
-  </style>
+  <meta name="theme-color" content="#eee8dc" />
+  <meta name="description" content="Plume is an independent salon collective with a strange little soul. Flexible stations, private studios, and room to create." />
+  <title>{% block title %}plume — a space for your strange{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=DM+Sans:wght@400;450;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/htmx.org@2.0.8" defer></script>
+  <style>{% include "styles.css" %}</style>
 </head>
-<body>
-  <header>
-    <h1>plume</h1>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/dashboard">Dashboard</a>
-      <a href="/book">Book a station</a>
-      <a href="/login">Login</a>
-      <a href="/logout">Logout</a>
+<body class="{% block body_class %}{% endblock %}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header wrap">
+    <a class="wordmark" href="/" aria-label="Plume home">plume<span aria-hidden="true">✳</span></a>
+    <nav aria-label="Main navigation">
+      <a href="/#spaces">The spaces</a>
+      <a href="/#spirit">The spirit</a>
+      {% if request.url.path.startswith('/dashboard') %}
+      <a href="/logout">Log out</a>
+      {% else %}
+      <a href="/login" {% if request.url.path == '/login' %}aria-current="page"{% endif %}>Operator login</a>
+      {% endif %}
     </nav>
+    <a class="button button-small" href="/book" {% if request.url.path == '/book' %}aria-current="page"{% endif %}>Find your space <span aria-hidden="true">↗</span></a>
   </header>
-  <main>
-    {% block content %}{% endblock %}
-  </main>
+  <main id="main" tabindex="-1">{% block content %}{% endblock %}</main>
+  <footer class="site-footer wrap">
+    <a class="wordmark" href="/" aria-label="Plume home">plume<span aria-hidden="true">✳</span></a>
+    <p>Independent spirits. Shared space.</p>
+    <a href="/dashboard">Operator dashboard <span aria-hidden="true">↗</span></a>
+    <span class="footer-note">A little out of the ordinary.</span>
+  </footer>
 </body>
 </html>

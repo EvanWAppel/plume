@@ -1,9 +1,20 @@
 {% extends "base.html" %}
 {% block title %}plume — operator dashboard{% endblock %}
 {% block content %}
-<section>
+<div class="app-main wrap">
+<div class="page-intro dashboard-intro">
+  <div><p class="eyebrow">Behind the scenes</p><h1>The studio <em>ledger.</em></h1><p>Your people, your spaces, and the business behind the magic.</p></div>
+  <a class="button button-outline" href="/book">Book a station <span aria-hidden="true">↗</span></a>
+</div>
+<div class="dashboard-stats" aria-label="Studio overview">
+  <div class="stat"><span>Members</span><strong>{{ members|length }}</strong></div>
+  <div class="stat"><span>Active stations</span><strong>{{ stations|selectattr('active')|list|length }}</strong></div>
+  <div class="stat"><span>Occupied suites</span><strong>{{ suite_rows|selectattr('suite.occupant_member_id')|list|length }} / {{ suite_rows|length }}</strong></div>
+</div>
+<section class="dashboard-section">
   <h2>Members</h2>
   {% if members %}
+  <div class="table-scroll" role="region" aria-label="Members" tabindex="0">
   <table>
     <thead>
       <tr><th>Name</th><th>Email</th><th>Tier</th><th>Status</th></tr>
@@ -13,20 +24,22 @@
       <tr>
         <td>{{ m.name }}</td>
         <td>{{ m.email }}</td>
-        <td>{{ m.tier.value }}</td>
-        <td>{{ m.status.value }}</td>
+        <td>{{ m.tier.value|replace('_', ' ')|title }}</td>
+        <td><span class="status status-{{ m.status.value|lower }}">{{ m.status.value|lower }}</span></td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+  </div>
   {% else %}
   <p>No members yet.</p>
   {% endif %}
 </section>
 
-<section>
+<section class="dashboard-section">
   <h2>Stations</h2>
   {% if stations %}
+  <div class="table-scroll" role="region" aria-label="Stations" tabindex="0">
   <table>
     <thead>
       <tr><th>Name</th><th>Active</th></tr>
@@ -40,14 +53,16 @@
       {% endfor %}
     </tbody>
   </table>
+  </div>
   {% else %}
   <p>No stations yet.</p>
   {% endif %}
 </section>
 
-<section>
+<section class="dashboard-section">
   <h2>Suites &amp; occupancy</h2>
   {% if suite_rows %}
+  <div class="table-scroll" role="region" aria-label="Suites and occupancy" tabindex="0">
   <table>
     <thead>
       <tr><th>Name</th><th>Monthly rate</th><th>Occupancy</th></tr>
@@ -56,7 +71,7 @@
       {% for row in suite_rows %}
       <tr>
         <td>{{ row.suite.name }}</td>
-        <td>{{ "%.2f"|format(row.suite.monthly_rate) }}</td>
+        <td>${{ "%.2f"|format(row.suite.monthly_rate) }}</td>
         <td>
           {% if row.occupant_name %}
             Occupied by {{ row.occupant_name }}
@@ -70,24 +85,26 @@
       {% endfor %}
     </tbody>
   </table>
+  </div>
   {% else %}
   <p>No suites yet.</p>
   {% endif %}
 </section>
 
-<section>
+<section class="dashboard-section">
   <h2>Billing</h2>
   {% if billing_message %}
-  <p class="notice">{{ billing_message }}</p>
+  <p class="notice" role="status">{{ billing_message }}</p>
   {% endif %}
-  <form method="post" action="/dashboard/run-billing" class="inline">
+  <form method="post" action="/dashboard/run-billing" class="billing-form">
     <label>Period (YYYY-MM)
       <input type="text" name="period" placeholder="2026-09" pattern="\d{4}-\d{2}" required />
     </label>
-    <button type="submit">Run monthly billing</button>
+    <button class="button" type="submit">Run monthly billing <span aria-hidden="true">↗</span></button>
   </form>
 
   {% if invoices %}
+  <div class="table-scroll" role="region" aria-label="Invoices" tabindex="0">
   <table>
     <thead>
       <tr><th>Member</th><th>Period</th><th>Kind</th><th>Amount</th><th>Status</th></tr>
@@ -97,13 +114,15 @@
       <tr>
         <td>{{ inv.member_id }}</td>
         <td>{{ inv.period }}</td>
-        <td>{{ inv.kind.value }}</td>
-        <td>{{ "%.2f"|format(inv.amount) }}</td>
-        <td>{{ inv.status.value }}</td>
+        <td>{{ inv.kind.value|replace('_', ' ')|title }}</td>
+        <td>${{ "%.2f"|format(inv.amount) }}</td>
+        <td><span class="status status-{{ inv.status.value|lower }}">{{ inv.status.value|lower }}</span></td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+  </div>
   {% endif %}
 </section>
+</div>
 {% endblock %}
