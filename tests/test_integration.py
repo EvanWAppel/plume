@@ -93,8 +93,8 @@ def test_create_station_allowed_for_operator(client: TestClient, operator_token:
 def test_reservation_flow_still_open(client: TestClient, make_member, make_station) -> None:
     member = make_member()
     station = make_station()
-    payload = {"member_id": member.id, "station_id": station.id, "date": "2026-10-01"}
+    payload = {"member_id": member.id, "station_id": station.id, "date": "2099-10-01"}
     assert client.post("/reservations", json=payload).status_code == 201
     assert client.post("/reservations", json=payload).status_code == 409
-    avail = client.get("/stations/available", params={"date": "2026-10-01"})
+    avail = client.get("/stations/available", params={"date": "2099-10-01"})
     assert avail.status_code == 200

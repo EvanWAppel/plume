@@ -14,7 +14,7 @@ def test_health(client: TestClient) -> None:
 def test_reserve_endpoint_and_conflict(client: TestClient, make_member, make_station) -> None:
     member = make_member()
     station = make_station()
-    payload = {"member_id": member.id, "station_id": station.id, "date": "2026-10-01"}
+    payload = {"member_id": member.id, "station_id": station.id, "date": "2099-10-01"}
 
     created = client.post("/reservations", json=payload)
     assert created.status_code == 201, created.text
@@ -30,10 +30,10 @@ def test_available_endpoint(client: TestClient, make_member, make_station) -> No
     free = make_station(name="C2")
     client.post(
         "/reservations",
-        json={"member_id": member.id, "station_id": booked.id, "date": "2026-10-01"},
+        json={"member_id": member.id, "station_id": booked.id, "date": "2099-10-01"},
     )
 
-    response = client.get("/stations/available", params={"date": "2026-10-01"})
+    response = client.get("/stations/available", params={"date": "2099-10-01"})
     assert response.status_code == 200
     ids = {s["id"] for s in response.json()}
     assert free.id in ids
