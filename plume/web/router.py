@@ -28,7 +28,7 @@ from typing import Annotated
 
 import jwt
 from fastapi import APIRouter, Depends, Form, Request, status
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session
 
@@ -127,6 +127,20 @@ def _login_redirect() -> RedirectResponse:
 @web_router.get("/", response_class=HTMLResponse)
 def index(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(request, "index.html", {})
+
+
+# --- favicon ----------------------------------------------------------------
+
+
+@web_router.get("/favicon.svg", include_in_schema=False)
+def favicon_svg() -> FileResponse:
+    return FileResponse(_TEMPLATES_DIR / "favicon.svg", media_type="image/svg+xml")
+
+
+@web_router.get("/favicon.ico", include_in_schema=False)
+def favicon_ico() -> RedirectResponse:
+    """Browsers probe ``/favicon.ico`` regardless of the ``<link>``; point them at the SVG."""
+    return RedirectResponse(url="/favicon.svg", status_code=status.HTTP_301_MOVED_PERMANENTLY)
 
 
 # --- F4: auth ---------------------------------------------------------------

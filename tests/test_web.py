@@ -49,6 +49,27 @@ def test_index_renders_200(web_client: TestClient) -> None:
     assert "text/html" in resp.headers["content-type"]
 
 
+# --- favicon ----------------------------------------------------------------
+
+
+def test_favicon_svg_served(web_client: TestClient) -> None:
+    resp = web_client.get("/favicon.svg")
+    assert resp.status_code == 200
+    assert resp.headers["content-type"].startswith("image/svg+xml")
+    assert "<svg" in resp.text
+
+
+def test_favicon_ico_redirects_to_svg(web_client: TestClient) -> None:
+    resp = web_client.get("/favicon.ico")
+    assert resp.status_code == 301
+    assert resp.headers["location"] == "/favicon.svg"
+
+
+def test_pages_link_favicon(web_client: TestClient) -> None:
+    resp = web_client.get("/")
+    assert '<link rel="icon" href="/favicon.svg" type="image/svg+xml"' in resp.text
+
+
 # --- F4: auth ---------------------------------------------------------------
 
 
