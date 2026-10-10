@@ -31,7 +31,7 @@ from plume.reservations.service import (
 )
 from plume.spaces.models import Station
 
-FUTURE = date(2026, 10, 1)
+FUTURE = date(2099, 10, 1)
 
 
 @pytest.fixture
@@ -151,8 +151,8 @@ def test_list_reservations_filters_combine(
     s2 = make_station(name="S2")
     assert m1.id is not None and m2.id is not None
     assert s1.id is not None and s2.id is not None
-    d1 = date(2026, 10, 1)
-    d2 = date(2026, 10, 2)
+    d1 = date(2099, 10, 1)
+    d2 = date(2099, 10, 2)
 
     reserve_station(session, m1.id, s1.id, d1)
     reserve_station(session, m1.id, s2.id, d2)
@@ -180,18 +180,18 @@ def test_reserve_recurring_expands_by_weekday(
     assert member.id is not None
     assert station.id is not None
 
-    # 2026-10-06 is a Tuesday; range covers Oct 6, 13, 20, 27 -> 4 Tuesdays.
-    start = date(2026, 10, 6)
-    end = date(2026, 10, 31)
+    # 2099-10-06 is a Tuesday; range covers Oct 6, 13, 20, 27 -> 4 Tuesdays.
+    start = date(2099, 10, 6)
+    end = date(2099, 10, 31)
     tuesday = start.weekday()  # 1
 
     created = reserve_recurring(session, member.id, station.id, tuesday, start, end)
     assert len(created) == 4
     assert {r.date for r in created} == {
-        date(2026, 10, 6),
-        date(2026, 10, 13),
-        date(2026, 10, 20),
-        date(2026, 10, 27),
+        date(2099, 10, 6),
+        date(2099, 10, 13),
+        date(2099, 10, 20),
+        date(2099, 10, 27),
     }
     assert all(r.id is not None for r in created)
 
@@ -205,15 +205,15 @@ def test_reserve_recurring_skips_conflicts(
     assert station.id is not None
 
     # Pre-book one of the Tuesdays; recurring should skip it and return the rest.
-    reserve_station(session, member.id, station.id, date(2026, 10, 13))
+    reserve_station(session, member.id, station.id, date(2099, 10, 13))
 
-    start = date(2026, 10, 6)
-    end = date(2026, 10, 31)
+    start = date(2099, 10, 6)
+    end = date(2099, 10, 31)
     created = reserve_recurring(session, member.id, station.id, start.weekday(), start, end)
 
     # 4 Tuesdays minus the one already held == 3 newly created.
     assert len(created) == 3
-    assert date(2026, 10, 13) not in {r.date for r in created}
+    assert date(2099, 10, 13) not in {r.date for r in created}
 
 
 # --- C5: endpoints ----------------------------------------------------------
@@ -261,18 +261,18 @@ def test_list_reservations_endpoint_filters(
 
     res_client.post(
         "/reservations",
-        json={"member_id": m1.id, "station_id": s1.id, "date": "2026-10-01"},
+        json={"member_id": m1.id, "station_id": s1.id, "date": "2099-10-01"},
     )
     res_client.post(
         "/reservations",
-        json={"member_id": m2.id, "station_id": s2.id, "date": "2026-10-02"},
+        json={"member_id": m2.id, "station_id": s2.id, "date": "2099-10-02"},
     )
 
     all_resp = res_client.get("/reservations")
     assert all_resp.status_code == 200
     assert len(all_resp.json()) == 2
 
-    by_date = res_client.get("/reservations", params={"date": "2026-10-01"})
+    by_date = res_client.get("/reservations", params={"date": "2099-10-01"})
     assert len(by_date.json()) == 1
 
     by_member = res_client.get("/reservations", params={"member_id": m1.id})

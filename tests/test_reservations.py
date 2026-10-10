@@ -19,7 +19,7 @@ def test_reserve_then_conflict(session: Session, make_member, make_station) -> N
     station = make_station()
     assert member.id is not None
     assert station.id is not None
-    when = date(2026, 10, 1)
+    when = date(2099, 10, 1)
 
     reservation = reserve_station(session, member.id, station.id, when)
     assert reservation.id is not None
@@ -34,8 +34,8 @@ def test_same_station_other_date_is_ok(session: Session, make_member, make_stati
     assert member.id is not None
     assert station.id is not None
 
-    reserve_station(session, member.id, station.id, date(2026, 10, 1))
-    second = reserve_station(session, member.id, station.id, date(2026, 10, 2))
+    reserve_station(session, member.id, station.id, date(2099, 10, 1))
+    second = reserve_station(session, member.id, station.id, date(2099, 10, 2))
     assert second.id is not None
 
 
@@ -48,7 +48,7 @@ def test_available_excludes_reserved_and_inactive(
     inactive_station = make_station(name="C3", active=False)
     assert member.id is not None
     assert booked_station.id is not None
-    when = date(2026, 10, 1)
+    when = date(2099, 10, 1)
 
     reserve_station(session, member.id, booked_station.id, when)
 
