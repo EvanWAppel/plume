@@ -139,8 +139,12 @@ def favicon_svg() -> FileResponse:
 
 @web_router.get("/favicon.ico", include_in_schema=False)
 def favicon_ico() -> RedirectResponse:
-    """Browsers probe ``/favicon.ico`` regardless of the ``<link>``; point them at the SVG."""
-    return RedirectResponse(url="/favicon.svg", status_code=status.HTTP_301_MOVED_PERMANENTLY)
+    """Browsers probe ``/favicon.ico`` regardless of the ``<link>``; point them at the SVG.
+
+    Temporary (307) on purpose: browsers cache a 301 indefinitely, so adding a
+    real ``.ico`` later would never reach returning visitors.
+    """
+    return RedirectResponse(url="/favicon.svg", status_code=status.HTTP_307_TEMPORARY_REDIRECT)
 
 
 # --- F4: auth ---------------------------------------------------------------
