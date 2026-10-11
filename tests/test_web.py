@@ -49,6 +49,37 @@ def test_index_renders_200(web_client: TestClient) -> None:
     assert "text/html" in resp.headers["content-type"]
 
 
+# --- favicon ----------------------------------------------------------------
+
+
+def test_favicon_svg_served(web_client: TestClient) -> None:
+    resp = web_client.get("/favicon.svg")
+    assert resp.status_code == 200
+    assert resp.headers["content-type"].startswith("image/svg+xml")
+    assert "<svg" in resp.text
+
+
+def test_favicon_ico_redirects_to_svg(web_client: TestClient) -> None:
+    # Temporary (307), not 301: browsers cache a 301 forever, which would
+    # strand returning visitors if a real .ico is ever added.
+    resp = web_client.get("/favicon.ico")
+    assert resp.status_code == 307
+    assert resp.headers["location"] == "/favicon.svg"
+
+
+def test_favicon_served_by_production_app(client: TestClient) -> None:
+    # ``web_client`` mounts web_router on its own app; this guards the real
+    # ``create_app()`` wiring so the favicon can't silently 404 in production.
+    resp = client.get("/favicon.svg")
+    assert resp.status_code == 200
+    assert resp.headers["content-type"].startswith("image/svg+xml")
+
+
+def test_pages_link_favicon(web_client: TestClient) -> None:
+    resp = web_client.get("/")
+    assert '<link rel="icon" href="/favicon.svg" type="image/svg+xml"' in resp.text
+
+
 # --- F4: auth ---------------------------------------------------------------
 
 
