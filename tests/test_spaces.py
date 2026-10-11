@@ -134,7 +134,7 @@ def test_double_assign_raises(session: Session, make_member) -> None:
 def test_stations_available_still_works(spaces_client: TestClient, make_station) -> None:
     """The pre-existing endpoint must survive the router extension."""
     free = make_station(name="Avail")
-    response = spaces_client.get("/stations/available", params={"date": "2026-10-01"})
+    response = spaces_client.get("/stations/available", params={"date": "2099-10-01"})
     assert response.status_code == 200
     assert free.id in {s["id"] for s in response.json()}
 
