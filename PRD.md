@@ -3,7 +3,9 @@
 > **Working project codename:** `plume`. **Public salon name:** _TBD — see [Q1](#decisions--open-questions-for-rory)._
 > **Owner:** Rory (sole proprietor / licensed cosmetologist).
 > **Prepared with:** Evan (setup/ops/finance advisor — no equity, no capital).
-> **Status:** Concept stage. Draft v0.1, 2026-09-11.
+> **Status:** Concept stage. Draft v0.2, 2026-09-16 — Rory's founder-interview answers folded in (email 2026-09-15). Real numbers now replace several `[ILLUSTRATIVE]` anchors; the illustrative P&L (§12.2) still needs a re-run on her actual pricing.
+
+> **Changelog v0.2 (2026-09-16):** Folded in Rory's answers to the founder interview (§16). Updated: book size & follow rate (§4.2), current-suite cost anchor (§5, §16 Q5), her real pricing & inclusions (§7, §16 Q8–Q9), retail/consignment/alcohol decisions (§7, §10), credit score (§12.3), 2nd-gen appetite (§8), target location, and timeline. **Three items still need a follow-up from Rory** (drafted for confirmation): the target center reads **"Calico Ridge," not a Lake Mead-corridor center** as previously assumed — confirm; the private-room spec **"30×30"** needs units clarified; and **"sponsor out"** needs explaining before she can answer it.
 
 ---
 
@@ -110,7 +112,7 @@ SBA rules (SOP 50 10 8, effective 2025-06-01) make businesses whose income comes
 - **Former Great Clips manager** — proven people management, scheduling, and high-throughput operations.
 - **Current independent suite renter** — she already runs her own business and *is the target customer* for the back studios, so she understands tenant needs first-hand.
 - **Color specialist + cuts** — high-margin, high-loyalty service niche.
-- **Portable client book** — the single biggest year-one survival factor; she brings existing revenue on day one. _`[RORY]` quantify: how many active regulars, and est. % who will follow to Cadence? — [Q3](#decisions--open-questions-for-rory)._
+- **Portable client book** — the single biggest year-one survival factor; she brings existing revenue on day one. ✅ **Answered (2026-09-15): ~50 regular clients** on a 4–8 week recurring cycle, many already in the **Green Valley / Cadence** area; she expects **~90% to follow** her. That's a strong, geographically-aligned anchor book. — [Q3](#decisions--open-questions-for-rory).
 - **The face of the brand** — customer-facing draw and community host.
 
 ### 4.3 Gaps & how they're covered
@@ -140,7 +142,7 @@ SBA rules (SOP 50 10 8, effective 2025-06-01) make businesses whose income comes
 ### 5.3 Retail context (the Lake Mead Pkwy corridor)
 - **Cadence Village Center** (~30 acres, E. Lake Mead Pkwy & Warm Springs Rd, 89015) is the retail core: anchored by **Smith's Marketplace** (opened Jan 2022), with **EOS Fitness** and **Grocery Outlet** added in Phase 2 (~2025) [⁵].
 - **Lake Mead Crossing** (Target, Sprouts, Ross, **Ulta**, Marshalls) serves the same trade area [⁵].
-- **Henderson retail asking rents:** ≈ **$25/sq ft/yr** (valley NNN ≈ $1.78–1.90/sq ft/mo, rising; vacancy ~4.3%, Q4 2025) [⁶]. _Rory noted she was eyeing "newer strip malls on Lake Mead" — the exact center is [Q13](#decisions--open-questions-for-rory)._
+- **Henderson retail asking rents:** ≈ **$25/sq ft/yr** (valley NNN ≈ $1.78–1.90/sq ft/mo, rising; vacancy ~4.3%, Q4 2025) [⁶]. ⚠️ **Answered (2026-09-15) with a discrepancy to resolve:** Rory named **"Calico Ridge"** as the target — a residential neighborhood in **northeast Henderson (89011)**, *not* a Lake Mead Pkwy retail center as previously assumed. Calico Ridge is inside the Cadence trade area but has thinner turnkey retail; the intended shopping center there needs to be pinned down. **Confirm the exact center** — [Q13](#decisions--open-questions-for-rory).
 
 > `[VERIFY]` The specific target center and its zoning/Master Sign Plan before signing (see §13).
 
@@ -174,27 +176,31 @@ A franchise (Sola/Phenix/MY SALON Suite) could enter Cadence. **Mitigation:** fi
 ### 7.1 Structure (written in the SBA-friendly active/membership framing — see §3)
 Two membership tiers + owner services + ancillary:
 
-**Tier 1 — Open Studio membership (front, ≈8 stations)**
-- Flexible access: **day passes** and/or **part-time monthly memberships**.
-- Market anchors [⁷]: Henderson booth/chair **~$150–$300/wk** (avg ~$197), monthlies **~$700–$950**; day rates commonly **~$50–$65/day**.
-- `[ILLUSTRATIVE]` **$55/day** drop-in, or **~$800/mo** part-time membership.
+**Tier 1 — Open Studio membership (front, ≈8 stations)** — ✅ **Rory's pricing (2026-09-15)**
+- Flexible access: **weekly station rental** and/or **commission chairs**.
+- Rory's rates: **open-station rental $225/week**; **commission split 60% house / 40% stylist**.
+- Market anchors for reference [⁷]: Henderson booth/chair **~$150–$300/wk** (avg ~$197). Her **$225/wk** sits mid-market — reasonable. _Note: her model is weekly rental + commission, not the day-pass framing originally sketched; the front-desk software/reservation needs adjust accordingly (§9.2)._
 
-**Tier 2 — Private Studio membership (back, ≈6 suites, 100–150 sq ft each)**
-- Monthly private studio + full amenities.
-- Market anchors [⁷]: valley suites avg **~$256/wk**; premium all-inclusive branded singles **~$335–$385/wk (~$1,340–$1,540/mo)**.
-- `[ILLUSTRATIVE]` **~$1,400/mo** all-inclusive.
+**Tier 2 — Private Studio membership (back, 4–6 suites)** — ✅ **Rory's pricing (2026-09-15)**
+- Monthly/weekly private studio + full amenities.
+- Rory's rate: **$300/week per private room** (≈ **$1,300/mo**), for **4–6 rooms** she specified as **"30×30."** ⚠️ **Confirm units on "30×30"** — 30×30 ft = 900 sq ft is far larger than a standard 100–150 sq ft suite and would blow up the size program (§8); she likely means something smaller. Flagged for follow-up — [Q8](#decisions--open-questions-for-rory).
+- Market anchors for reference [⁷]: valley suites avg **~$256/wk**; premium all-inclusive **~$335–$385/wk**. Her **$300/wk** is competitive.
 
 **Owner services (active revenue — important for SBA framing)**
-- Rory's own color/cut book, operating from a house studio. _`[RORY]` current monthly service revenue? — [Q4](#decisions--open-questions-for-rory)._
+- Rory's own color/cut book. ✅ **Answered (2026-09-15): ~$3,000/mo** currently, working only **3 days/week and not fully booked** (**$4,000+/mo pre-kids**) — so meaningful upside headroom on days and capacity. This is a **load-bearing pillar** of the model (§12.2). — [Q4](#decisions--open-questions-for-rory).
 
-**Ancillary**
-- Retail product margin, art consignment commission, occasional event/sponsor income (§10). _`[RORY]` decisions: sell retail? bar income? sublet gallery wall? — [Q9–Q11](#decisions--open-questions-for-rory)._
+**Ancillary** — ✅ **Rory's decisions (2026-09-15)**
+- **Retail:** yes — **ENJOY** hair products + styling tools.
+- **Art gallery:** local artists use the space; salon takes **10% consignment** on sales.
+- **Events/alcohol:** wants **alcohol at events** ("would bring more bodies"); the "sponsor the gallery wall" idea wasn't understood and needs re-explaining before she can decide (§10). — [Q9–Q11](#decisions--open-questions-for-rory).
 
 ### 7.2 What's included in membership (drives the value prop *and* the cost model)
-Market norm: furniture, WiFi, parking, break room are **universally included**; utilities usually; laundry/towels often; stylists pay their own **liability insurance (~$20/mo), license, and back-bar/color** [⁷]. _`[RORY]` decide the exact inclusion list — [Q9](#decisions--open-questions-for-rory)._
+Market norm: furniture, WiFi, parking, break room are **universally included**; utilities usually; laundry/towels often; stylists pay their own **liability insurance (~$20/mo), license, and back-bar/color** [⁷]. ✅ **Rory's inclusion list (2026-09-15):**
+- **Private room rent includes:** washer/dryer, refrigerator, utilities, WiFi, **24-hr salon access**, a **website profile**, and **booking**.
+- **Commission chairs & floor (weekly) rentals include:** all of the above **plus towels and back-bar.** _(So back-bar/color is included only for the front/commission tier, not the private rooms — a deliberate tiering worth confirming holds in the cost model, §12.)_ — [Q9](#decisions--open-questions-for-rory).
 
 ### 7.3 Occupancy assumptions (underwrite conservatively)
-Franchise data: **mature occupancy ~90–94%**, but a **6–12 month ramp** from ~48% (month 1) to ~80–89% (month 12) [⁷]. The model must survive the ramp, not assume day-one-full. Rory's book and any **pre-committed stylists** shorten the ramp materially. _`[RORY]` any stylists already interested? — [Q12](#decisions--open-questions-for-rory)._
+Franchise data: **mature occupancy ~90–94%**, but a **6–12 month ramp** from ~48% (month 1) to ~80–89% (month 12) [⁷]. The model must survive the ramp, not assume day-one-full. Rory's book and any **pre-committed stylists** shorten the ramp materially. ⚠️ **Answered (2026-09-15): no committed stylists yet.** Rory plans to recruit via **cosmetology schools and online**; one lead — **Manny's sister**, currently in cosmo school — may be interested. **Implication:** underwrite the ramp conservatively (no pre-leased units at open); front-tier occupancy leans on recruiting + Rory's book at launch. — [Q12](#decisions--open-questions-for-rory).
 
 ---
 
@@ -215,7 +221,7 @@ Franchise data: **mature occupancy ~90–94%**, but a **6–12 month ramp** from
 - **⚠️ This is the central financial risk (see §12).** At ~14 units, that debt load is heavy.
 
 ### 8.3 Recommendation — target second-generation salon space
-The single most powerful cost lever is leasing a **former salon** ("2nd-gen") that already has plumbing, stations, and ventilation. This can cut build-out by a large fraction and is the difference between tight and comfortable. **Priority in the site search.** _`[RORY]` open to 2nd-gen space? — [Q14](#decisions--open-questions-for-rory)._
+The single most powerful cost lever is leasing a **former salon** ("2nd-gen") that already has plumbing, stations, and ventilation. This can cut build-out by a large fraction and is the difference between tight and comfortable. **Priority in the site search.** ✅ **Answered (2026-09-15): yes — Rory is open to buying out / taking over an existing salon.** This unlocks the low-build-out path the whole financial model depends on. — [Q14](#decisions--open-questions-for-rory).
 
 ---
 
@@ -237,7 +243,7 @@ The operator's real software needs are narrower than a full salon: **(a) members
 | **Suite-specific tools** (e.g., salon-suite mgmt SaaS) | Varies | Purpose-built for rent/membership + access | Smaller ecosystems | Worth shortlisting |
 | **Custom build (Evan)** | Dev time + hosting + Stripe fees | Exactly fits the model; no per-seat fees at scale; owns the data; a differentiator | Build + maintenance burden; no vendor support; payments/compliance to handle | **Phase 2** — launch on off-the-shelf, build custom once the model is proven |
 
-**Recommendation:** launch on an **off-the-shelf tool (Vagaro or a suite-specific SaaS)** to de-risk opening; treat the **custom build as a Phase-2 project** that narrowly targets front-chair reservations + membership billing. _`[RORY]` evaluate and pick — [Q7](#decisions--open-questions-for-rory)._
+**Recommendation:** launch on an **off-the-shelf tool (Vagaro or a suite-specific SaaS)** to de-risk opening; treat the **custom build as a Phase-2 project** that narrowly targets front-chair reservations + membership billing. ✅ **Answered (2026-09-15):** Rory currently uses **Square** and is open to a salon-specific POS — she deferred the choice to us ("I don't have a clue. This is why I need you."). **Implication:** Square can bridge day-one payments/retail; the operator-side membership-billing + access-control layer is where Evan's build or a suite SaaS adds value. — [Q7](#decisions--open-questions-for-rory).
 
 ### 9.3 Member lifecycle
 Standard suite terms [⁷]: month-to-month to 12-month agreements, **30-day notice**, **deposit ≈1–4 weeks**. Onboarding must capture proof of **cosmetology license + liability insurance** and (pending `[VERIFY]`) any per-suite establishment licensing (§13).
@@ -275,6 +281,8 @@ _`[RORY]` a working salon name + aesthetic direction unlock all brand/marketing 
 ## 12. Financial Plan
 
 > **All figures below are `[ILLUSTRATIVE]`** placeholders built on cited market anchors, present so the model *computes*. Replace with Rory's real numbers ([§16](#decisions--open-questions-for-rory)) and validate structure with SBDC/lender (§3) before submitting to any lender.
+>
+> **⚠️ Re-run needed (2026-09-16):** Rory's real inputs are now in — private rooms **$300/wk (~$1,300/mo)**, open stations **$225/wk**, commission **60/40**, her own book **~$3,000/mo**, retail via **ENJOY**, art consignment **10%**. The illustrative P&L below still uses the old placeholder rates and **has not yet been recomputed** on her actual pricing (and on the corrected room count/size once "30×30" is clarified). Treat §12.2 as stale pending that re-run.
 
 ### 12.1 Sources & Uses (illustrative, second-gen space)
 | Uses | `[ILLUSTRATIVE]` |
@@ -321,7 +329,7 @@ _`[RORY]` a working salon name + aesthetic direction unlock all brand/marketing 
 - **3-year projections, with Year-1 monthly** cash flow; 3-statement model; break-even; sources & uses.
 - **Equity injection ≥10%** of project cost (lenders often want 15–30% from startups).
 - **Personal guarantee** (all owners ≥20% → Rory).
-- **Credit** typically **680+ (700+ preferred for startups).** _`[RORY]` credit posture? (sensitive — handle privately)._
+- **Credit** typically **680+ (700+ preferred for startups).** ✅ **Answered (2026-09-15): ~796** — comfortably above lender thresholds and a genuine strength in the loan narrative. _(Sensitive — keep out of any leave-behind shared beyond a lender.)_
 - **Collateral** taken where available (loan not denied on collateral alone above $50K).
 
 ### 12.4 Break-even & ramp
@@ -380,7 +388,7 @@ Model **month-by-month for year 1** through the occupancy ramp; the **6-month wo
 
 ## 15. Timeline & Milestones
 
-_Urgency is real (Cadence is filling; first-mover advantage). Indicative sequence — dates `[RORY]` to set, see [Q15](#decisions--open-questions-for-rory):_
+_Urgency is real (Cadence is filling; first-mover advantage). Rory's target open is **"after the beginning of the year" (early 2027)** with no hard deadline — enough runway to validate financing and run a proper site search. Indicative sequence:_
 
 1. **Validate financing structure** with Nevada SBDC / lender (§3). ← *gating; in `BLOCKED.md`*
 2. **Lock Rory's decisions** (§16) — name, pricing, inclusions, ceiling, stylist commitments.
@@ -395,34 +403,36 @@ _Urgency is real (Cadence is filling; first-mover advantage). Indicative sequenc
 
 ## 16. Decisions & Open Questions for Rory
 
-_This section is the interview instrument. Nothing downstream is final until these are answered. Tagged inline as `[RORY]` throughout._
+_This section is the interview instrument. **Most items were answered by Rory on 2026-09-15** (✅). Remaining opens are flagged 🟡/⚠️ and are the subject of a follow-up confirmation email._
 
 **Brand & vision**
-- **Q1. Salon name?** (Working codename is `plume`.)
-- **Q2. Aesthetic / vibe direction?** (industrial, boho, luxe, gallery-white, desert-modern…) — your call; unlocks branding.
-- **Q6. Confirm the "grow-with-us ladder"** (front day-renters → back private studios) matches your intent.
+- **Q1. Salon name?** (Working codename is `plume`.) — 🟡 **Open.** Not addressed in her reply; keep `plume` as working name until she weighs in.
+- **Q2. Aesthetic / vibe direction?** — ✅ **Boho / modern.** Deep purple with gold, warm lighting, drop lights, local artwork, wooden stations with granite countertops. _Unlocks branding — carry this palette into the deck, flyer, and website._
+- **Q6. Confirm the "grow-with-us ladder"** (front renters → back private studios) matches your intent. — 🟡 **Open** (implicitly consistent with her tiered pricing, but not explicitly confirmed).
 
 **The book & the model**
-- **Q3. How many active regular clients do you have, and what % will follow you to Cadence?** (Biggest year-one factor.)
-- **Q4. What's your current monthly service revenue?** (Load-bearing in the financial model.)
-- **Q5. What do you pay for your current suite, and what do comparable suites/booths go for around Henderson?** (Best market anchor we have.)
+- **Q3. Active regulars + % following to Cadence?** — ✅ **~50 regulars** (4–8 wk recurring), concentrated in **Green Valley/Cadence**; **~90% expected to follow.**
+- **Q4. Current monthly service revenue?** — ✅ **~$3,000/mo** (3 days/wk, not fully booked; **$4,000+ pre-kids** — upside headroom).
+- **Q5. Current suite cost + comparable Henderson rates?** — ✅ **$325/wk** for her current suite (she pays **half** because she shares the room); market suites **$300–$500/wk** by square footage. _(Current suite: MY Salon Suites, 1520 W Sunset Rd STE 130, Henderson 89014.)_
 
 **Pricing & inclusions**
-- **Q8. Target pricing:** monthly private-studio rate + daily/part-time front-chair rate.
-- **Q9. What's included** in membership vs. paid separately (utilities, wifi, laundry/towels, back-bar/color, booking software, marketing, parking)?
-- **Q10. Retail products** — sell them (salon takes margin)? And the **art consignment commission %**?
-- **Q11. Bar / alcohol at events?** And **sublet/sponsor the gallery wall?**
+- **Q8. Target pricing.** — ✅ **Private rooms $300/wk** (4–6 rooms, "**30×30**" — ⚠️ units to confirm); **open stations $225/wk**; **commission 60% house / 40% stylist.**
+- **Q9. What's included.** — ✅ **Private room rent:** washer/dryer, fridge, utilities, WiFi, 24-hr access, website profile, booking. **Commission/floor rentals:** the above **+ towels & back-bar.**
+- **Q10. Retail + art consignment %.** — ✅ **Retail:** ENJOY hair products + styling tools. **Art consignment: 10%.**
+- **Q11. Bar/alcohol + sponsor the gallery wall?** — ✅ **Alcohol at events: yes** ("brings more bodies"). ⚠️ **"Sponsor out the gallery wall" not understood** — needs re-explaining before she can answer.
 
 **Stylists & space**
-- **Q12. Any specific stylists already interested** in joining at launch? (Even 2–3 de-risks year one dramatically.)
-- **Q7. Booking software** — evaluate the §9.2 options and pick; is Evan's custom build in scope for launch or Phase 2?
-- **Q14. Open to a second-generation (former-salon) space** to cut build-out? (Strongly recommended.)
+- **Q12. Stylists already interested?** — ✅ **None committed yet.** Will recruit via cosmo schools + online; lead: **Manny's sister** (in cosmo school).
+- **Q7. Booking software.** — ✅ Uses **Square** today; open to a salon-specific POS; defers the pick to us. _Launch on Square + a suite/membership layer; Evan's custom build = Phase 2._
+- **Q14. Open to a 2nd-gen (former-salon) space?** — ✅ **Yes — open to buying out an existing salon.**
 
 **Money & timing**
-- **Q16. Cost ceiling** — is there a "if it costs more than $X, it's a no-go" number, and how far will you flex it for a strong plan?
-- **Q17. Financing** — SBA vs. conventional preference; comfort with a personal guarantee; equity injection you can contribute (10–30% of project cost).
-- **Q13. Target location** — which Lake Mead-corridor center were you looking at?
-- **Q15. Target open date** and any hard deadlines (current lease ending, a specific space becoming available).
+- **Q16. Cost ceiling?** — 🟡 **No stated ceiling** ("I don't have a clue. This is why I need you."). We'll propose a defensible budget range instead of asking her for a number cold.
+- **Q17. Financing (SBA vs. conventional, personal guarantee, equity injection).** — Partly informed: **credit ~796** (§12.3). 🟡 **Still open:** guarantee comfort + equity she can inject (10–30% of project cost).
+- **Q13. Target location.** — ⚠️ **"Calico Ridge"** (NE Henderson, 89011) — *not* the Lake Mead corridor we'd assumed. **Confirm the specific center** (Calico Ridge has limited turnkey retail).
+- **Q15. Target open date + hard deadlines.** — ✅ **"After the beginning of the year"** (early 2027). No hard deadline stated; her current suite is shared/weekly, so lease timing is flexible.
+
+**Still needs a reply from Rory (follow-up email drafted):** Q1 (name), Q13 (which Calico Ridge center), Q8 ("30×30" units), Q11 ("sponsor out" once explained), Q17 (equity + guarantee comfort).
 
 ---
 
@@ -460,6 +470,7 @@ Short, audience-ready leave-behinds derived from this plan. All live in [`/artif
 | **One-page brief** | [`artifacts/ONE_PAGER.md`](./artifacts/ONE_PAGER.md) | Lenders, landlords | The whole business in 60 seconds |
 | **Founding Stylist flyer** | [`artifacts/FOUNDING_STYLISTS.md`](./artifacts/FOUNDING_STYLISTS.md) | Stylists (recruiting) | "Reserve your spot" leave-behind — signs early tenants, which de-risks the loan |
 | **Email to Rory** | [`artifacts/EMAIL_TO_RORY.md`](./artifacts/EMAIL_TO_RORY.md) | Rory | Sends her the §16 questions in a warm, reply-inline format |
+| **Reply to Rory (confirmation)** | [`artifacts/REPLY_TO_RORY.md`](./artifacts/REPLY_TO_RORY.md) | Rory | Plays back her 2026-09-15 answers to confirm, and asks the 5 still-open items (name, "30×30" units, Calico Ridge center, "sponsor out", equity/guarantee) |
 
 **Note on the Founding Stylist flyer:** it is a **recruiting / membership** piece ("invest in yourself"), **not** an equity or securities offering. Selling ownership stakes to stylists would trigger securities regulation and break the sole-owner structure lenders prefer — out of scope unless deliberately chosen with counsel.
 
