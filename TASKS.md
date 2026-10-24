@@ -103,6 +103,7 @@ Goal: the thinnest end-to-end slice proving the whole pipeline runs — *a styli
 - [x] **E4** — Role guard dependency `require_operator`; protect write endpoints (members/spaces/billing). **Dep:** A4, B4, D5. _TDD (first): member token → 403 on operator route; operator token → 200._
 - [x] **E5** — `POST /auth/login`, `POST /auth/register` (operator-gated). _TDD (first): login returns token; register requires operator._
 - [x] **E6 / PLAT-SEC-01** — Fail closed without `PLUME_SECRET_KEY` (no dev-default secret): sign-ins and presented tokens/cookies are refused with "Login not configured"; seed-on-start takes the operator password from `PLUME_SEED_OPERATOR_PASSWORD` or skips. _TDD (first): `tests/test_fail_closed.py`._ See DECISIONS 2026-10-24.
+- [x] **E7 / PLAT-SEC-02** — No unauthenticated operator bootstrap: `POST /auth/register` is operator-only even on an empty DB; the first operator comes from the seed or `python -m plume.auth.cli create-operator` on the host. _TDD (first): `tests/test_no_open_bootstrap.py`._ See DECISIONS 2026-10-24.
 
 ## Group F — Minimal Web UI  (owns `plume/web/`)
 **Dep:** S8, and the API groups it surfaces (A4/B4/C5/D5). Do after core API is green.

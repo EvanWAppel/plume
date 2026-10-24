@@ -48,6 +48,28 @@ Set these service variables:
   unset or empty the seed is skipped, so a deploy never carries a published password.
 - `PLUME_DATABASE_URL` — optional SQLAlchemy URL; defaults to `sqlite:///plume.db`.
 
+### The first operator
+
+No HTTP request can create an operator without an operator's token — `POST /auth/register`
+is operator-only even when the database is empty, so an empty deploy cannot be claimed by
+whoever registers first. The first operator comes from a trusted channel only:
+
+- **Seed-on-start** — `PLUME_SEED_ON_START=1` + `PLUME_SEED_OPERATOR_PASSWORD` (above), or
+- **The CLI, in a shell on the host** (`railway ssh` on Railway), against the same database:
+
+  ```bash
+  uv run python -m plume.auth.cli create-operator --email you@example.com
+  ```
+
+  It prompts for the password twice and never takes it on the command line. An empty or
+  mismatched password, or an email already in use, creates nothing.
+
+That operator then creates everyone else (stylists, more operators) through
+`POST /auth/register`. There is no public self-registration.
+
+The Railway service has **no volume**, so its SQLite database starts empty on every deploy:
+anything not re-created by the seed is lost, including a CLI-created operator.
+
 ## Tests, lint, typecheck
 
 ```bash

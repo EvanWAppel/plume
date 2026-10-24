@@ -173,7 +173,7 @@ def test_require_operator_rejects_member_with_403(
     assert resp.status_code == 403
 
 
-# --- E5: login + register (bootstrap + operator-gated) -------------------
+# --- E5: login + register (operator-gated, no bootstrap) -----------------
 
 
 def test_login_returns_token(auth_client: TestClient, session: Session) -> None:
@@ -195,23 +195,21 @@ def test_login_bad_credentials_is_401(auth_client: TestClient, session: Session)
     assert resp.status_code == 401
 
 
-def test_bootstrap_register_creates_first_operator(
+def test_register_on_empty_db_without_token_is_rejected(
     auth_client: TestClient, session: Session
 ) -> None:
+    # PLAT-SEC-02: no unauthenticated bootstrap; see tests/test_no_open_bootstrap.py
     resp = auth_client.post(
         "/auth/register",
         json={"email": "first@example.com", "password": "pw", "role": "OPERATOR"},
     )
-    assert resp.status_code == 201
-    created = session.exec(select(User).where(User.email == "first@example.com")).one()
-    assert created.role == Role.OPERATOR
-    assert created.hashed_password != "pw"
+    assert resp.status_code == 401
+    assert session.exec(select(User)).first() is None
 
 
 def test_second_register_without_operator_token_is_rejected(
     auth_client: TestClient, session: Session
 ) -> None:
-    # bootstrap the first operator
     _make_user(session, email="boss@example.com", role=Role.OPERATOR)
     # a second, unauthenticated register must be rejected (users already exist)
     resp = auth_client.post(

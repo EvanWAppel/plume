@@ -13,6 +13,11 @@ swallowed. The signing secret comes only from ``PLUME_SECRET_KEY``.
 ``PLUME_SECRET_KEY`` is unset or empty, no token is ever issued
 (:class:`LoginNotConfiguredError`) and any presented token is refused with a
 503 "Login not configured", so a deploy missing the variable admits no one.
+
+**No open bootstrap (PLAT-SEC-02):** no HTTP path creates an operator without an
+operator's token. The first operator comes only from a trusted channel: the
+seed (``PLUME_SEED_OPERATOR_PASSWORD``) or :func:`create_operator` via the
+``python -m plume.auth.cli create-operator`` command run on the host.
 """
 
 from __future__ import annotations
@@ -45,6 +50,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
 
 class LoginNotConfiguredError(RuntimeError):
     """Raised when a token would be signed but ``PLUME_SECRET_KEY`` is unset/empty."""
+
+
+class UserExistsError(ValueError):
+    """Raised when creating a user whose email is already registered."""
+
+
+class EmptyPasswordError(ValueError):
+    """Raised when creating a user with an empty or whitespace-only password."""
 
 
 def get_secret_key() -> str | None:
@@ -96,6 +109,27 @@ def authenticate(session: Session, email: str, password: str) -> User | None:
         logger.info("authenticate: bad password for email=%s", email)
         return None
     logger.info("authenticate: success for email=%s", email)
+    return user
+
+
+def create_operator(session: Session, *, email: str, password: str) -> User:
+    """Create an OPERATOR. For trusted channels only (CLI on the host), never HTTP.
+
+    Fails closed: an empty email or password, or an email already in use, raises
+    and creates nothing. The password is stored only as a bcrypt hash.
+    """
+    email = email.strip()
+    if not email:
+        raise ValueError("email is required")
+    if not password.strip():
+        raise EmptyPasswordError("password is required")
+    if session.exec(select(User).where(User.email == email)).first() is not None:
+        raise UserExistsError(f"a user with email {email} already exists")
+    user = User(email=email, hashed_password=hash_password(password), role=Role.OPERATOR)
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    logger.info("create_operator: created operator id=%s email=%s", user.id, email)
     return user
 
 
