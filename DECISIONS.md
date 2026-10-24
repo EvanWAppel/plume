@@ -51,3 +51,34 @@ token. Failing closed makes the misconfiguration visible instead of exploitable.
 **Trade-off:** local runs need `PLUME_SECRET_KEY` exported; a deploy with
 `PLUME_SEED_ON_START=1` but no `PLUME_SEED_OPERATOR_PASSWORD` boots with no
 demo data. Key length (≥32 bytes) is still advice, not enforced.
+
+## 2026-10-24 — No unauthenticated operator bootstrap (PLAT-SEC-02)
+
+**Approved by Evan 2026-10-24.**
+
+**Chose:** `POST /auth/register` requires an operator's token always, including when the
+users table is empty (401 without a token, 403 for a member). The first operator comes
+only from a trusted channel: seed-on-start (`PLUME_SEED_OPERATOR_PASSWORD`, from
+PLAT-SEC-01) or `python -m plume.auth.cli create-operator --email …`, run in a shell on
+the host (`railway ssh`). The CLI reads the password from the terminal twice and fails
+closed: empty or mismatched password, or an existing email, creates nothing and exits
+non-zero. No public self-registration for any role.
+
+**Rejected:**
+- Keeping the empty-table bootstrap. The Railway service has no volume, so the SQLite DB
+  is empty after every deploy; whoever registered first got operator access.
+- A bootstrap token in an env var (`PLUME_BOOTSTRAP_TOKEN`) accepted over HTTP. It still
+  exposes an operator-creating endpoint to the internet and is one more secret to manage;
+  the seed and a host shell already cover the need.
+- Public self-registration as MEMBER. The only roles are OPERATOR and MEMBER (stylist).
+  Members are onboarded by the operator (license and insurance checks), and clients are
+  not users here: stylists bring their own client-booking tools (PRD §9). Nothing needs
+  an open sign-up, so there is none.
+
+**Why:** an unauthenticated path that can mint an operator turns every fresh database into
+an open door. Making the bootstrap a host-side action means only someone who already
+controls the deploy can create the first operator.
+
+**Trade-off:** a fresh local or deployed DB has no way in until the seed or the CLI runs.
+On Railway without a volume, a CLI-created operator is wiped on the next deploy, so the
+seed is the practical path there until the service gets a volume or a real database.

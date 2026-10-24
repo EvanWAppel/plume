@@ -1,8 +1,9 @@
 """Auth API (E5): login + operator-gated register.
 
-Bootstrap rule: when NO users exist yet, ``POST /auth/register`` creates the
-first OPERATOR without authentication. Once any user exists, registration is
-gated behind ``require_operator``.
+``POST /auth/register`` always requires an operator's token, even when no users
+exist (PLAT-SEC-02). There is no unauthenticated bootstrap: the first operator
+comes from the seed (``PLUME_SEED_OPERATOR_PASSWORD``) or from
+``python -m plume.auth.cli create-operator`` run on the host.
 
 ``/auth/me`` and ``/auth/operator-only`` exercise the E3 dependencies and are
 handy probes for the eventual UI (Group F).
@@ -73,45 +74,39 @@ def login(payload: LoginRequest, session: Session = Depends(get_session)) -> Tok
     return TokenResponse(access_token=create_access_token(user))
 
 
-def _users_exist(session: Session) -> bool:
-    return session.exec(select(User)).first() is not None
-
-
 @router.post("/register", response_model=UserPublic, status_code=status.HTTP_201_CREATED)
 def register(
     payload: RegisterRequest,
     session: Session = Depends(get_session),
     caller: User | None = Depends(get_optional_user),
 ) -> User:
-    """Create a user.
+    """Create a user. Operator only, always.
 
-    - Bootstrap: if no users exist, create the first OPERATOR unauthenticated.
-    - Otherwise: require an authenticated operator. A missing token yields 401
-      (via ``require_operator`` -> ``get_current_user``); a non-operator yields
-      403.
+    A missing token yields 401 (via ``require_operator`` -> ``get_current_user``);
+    a non-operator yields 403. An empty users table changes nothing: no request
+    can create the first operator (PLAT-SEC-02).
     """
-    if not _users_exist(session):
-        # Bootstrap the very first account as an operator regardless of the
-        # requested role — someone has to be able to administer the system.
-        logger.info("register: bootstrapping first operator email=%s", payload.email)
-        role = Role.OPERATOR
-    else:
-        # Users already exist: enforce operator-gating. Reuse the same
-        # dependencies so behavior matches the guarded routes exactly.
-        require_operator(get_current_user(caller))
-        if session.exec(select(User).where(User.email == str(payload.email))).first() is not None:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="email already registered",
-            )
-        logger.info(
-            "register: operator creating user email=%s role=%s", payload.email, payload.role
+    if caller is None and session.exec(select(User)).first() is None:
+        logger.warning(
+            "register: refused unauthenticated request on an empty users table; create the "
+            "first operator with `python -m plume.auth.cli create-operator` or the seed"
         )
-        role = payload.role
+    operator = require_operator(get_current_user(caller))
+    if session.exec(select(User).where(User.email == str(payload.email))).first() is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="email already registered",
+        )
+    logger.info(
+        "register: operator id=%s creating user email=%s role=%s",
+        operator.id,
+        payload.email,
+        payload.role,
+    )
     user = User(
         email=str(payload.email),
         hashed_password=hash_password(payload.password),
-        role=role,
+        role=payload.role,
         member_id=payload.member_id,
     )
     session.add(user)
