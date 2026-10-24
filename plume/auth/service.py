@@ -7,8 +7,12 @@
   orchestrator applies to other routers in E4.
 
 Errors are raised at the boundary as ``HTTPException`` (401/403); nothing is
-swallowed. The signing secret comes from ``PLUME_SECRET_KEY`` with a dev
-default that MUST be overridden in production.
+swallowed. The signing secret comes only from ``PLUME_SECRET_KEY``.
+
+**Fails closed (PLAT-SEC-01):** there is no default secret. If
+``PLUME_SECRET_KEY`` is unset or empty, no token is ever issued
+(:class:`LoginNotConfiguredError`) and any presented token is refused with a
+503 "Login not configured", so a deploy missing the variable admits no one.
 """
 
 from __future__ import annotations
@@ -30,18 +34,42 @@ logger = logging.getLogger(__name__)
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
-# Dev-only default; MUST be overridden via PLUME_SECRET_KEY in production.
-# (HS256 emits an InsecureKeyLengthWarning for this short dev key — expected in
-# dev; production keys from PLUME_SECRET_KEY should be >=32 bytes.)
-_DEV_SECRET = "dev-secret-change-me"
+SECRET_ENV = "PLUME_SECRET_KEY"
+LOGIN_NOT_CONFIGURED = (
+    "Login not configured: this deploy has no signing secret set, so sign-in is disabled."
+)
 
 # tokenUrl points at the login route so OpenAPI's "Authorize" flow works.
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
 
 
-def get_secret_key() -> str:
-    """Signing secret from env with a dev default (override in production)."""
-    return os.getenv("PLUME_SECRET_KEY", _DEV_SECRET)
+class LoginNotConfiguredError(RuntimeError):
+    """Raised when a token would be signed but ``PLUME_SECRET_KEY`` is unset/empty."""
+
+
+def get_secret_key() -> str | None:
+    """The JWT signing secret, or ``None`` when ``PLUME_SECRET_KEY`` is unset or empty."""
+    return os.getenv(SECRET_ENV) or None
+
+
+def login_configured() -> bool:
+    """Whether a signing secret is set, i.e. anyone can sign in at all."""
+    return get_secret_key() is not None
+
+
+def _require_secret_key() -> str:
+    key = get_secret_key()
+    if key is None:
+        logger.error("%s is unset or empty; sign-in is closed to everyone", SECRET_ENV)
+        raise LoginNotConfiguredError(LOGIN_NOT_CONFIGURED)
+    return key
+
+
+def login_not_configured_exc() -> HTTPException:
+    """The 503 every auth boundary returns while no signing secret is set."""
+    return HTTPException(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=LOGIN_NOT_CONFIGURED
+    )
 
 
 # --- E2: password hashing + authentication -------------------------------
@@ -85,7 +113,7 @@ def create_access_token(user: User, *, expires_minutes: int = ACCESS_TOKEN_EXPIR
         "exp": now + dt.timedelta(minutes=expires_minutes),
         "iat": now,
     }
-    return jwt.encode(payload, get_secret_key(), algorithm=ALGORITHM)
+    return jwt.encode(payload, _require_secret_key(), algorithm=ALGORITHM)
 
 
 _CREDENTIALS_EXC = HTTPException(
@@ -103,13 +131,18 @@ def get_optional_user(
 
     Returns ``None`` for a missing token; raises ``HTTPException(401)`` for a
     malformed, tampered, or expired token, or a ``sub`` that no longer maps to a
-    user. Used by endpoints (like register) that must distinguish "no caller"
-    from "invalid caller".
+    user, and ``HTTPException(503)`` for any token while no signing secret is
+    set (fail closed). Used by endpoints (like register) that must distinguish
+    "no caller" from "invalid caller".
     """
     if not token:
         return None
+    key = get_secret_key()
+    if key is None:
+        logger.error("get_optional_user: %s unset or empty; refusing token", SECRET_ENV)
+        raise login_not_configured_exc()
     try:
-        payload = jwt.decode(token, get_secret_key(), algorithms=[ALGORITHM])
+        payload = jwt.decode(token, key, algorithms=[ALGORITHM])
     except jwt.PyJWTError as exc:
         logger.info("get_optional_user: token decode failed: %s", exc)
         raise _CREDENTIALS_EXC from exc

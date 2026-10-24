@@ -30,6 +30,7 @@ def test_database_url_defaults_and_env(monkeypatch) -> None:
 def test_seed_on_start_loads_demo_operator(monkeypatch, tmp_path: Path) -> None:
     db_file = tmp_path / "preview.db"
     monkeypatch.setenv("PLUME_SEED_ON_START", "1")
+    monkeypatch.setenv("PLUME_SEED_OPERATOR_PASSWORD", "a-private-demo-password")
     monkeypatch.setenv("PLUME_DATABASE_URL", f"sqlite:///{db_file.as_posix()}")
     reset_engine()
     try:

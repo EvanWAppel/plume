@@ -35,9 +35,11 @@ from sqlmodel import Session
 from plume.auth.models import Role, User
 from plume.auth.service import (
     ALGORITHM,
+    LOGIN_NOT_CONFIGURED,
     authenticate,
     create_access_token,
     get_secret_key,
+    login_configured,
 )
 from plume.billing.service import generate_monthly_invoices, list_invoices
 from plume.db import get_session
@@ -86,8 +88,12 @@ def _load_operator_from_cookie(request: Request, session: Session) -> User | Non
     if not token:
         logger.info("web auth: no %s cookie", COOKIE_NAME)
         return None
+    key = get_secret_key()
+    if key is None:
+        logger.error("web auth: signing secret not configured; refusing cookie")
+        return None
     try:
-        payload = jwt.decode(token, get_secret_key(), algorithms=[ALGORITHM])
+        payload = jwt.decode(token, key, algorithms=[ALGORITHM])
     except jwt.PyJWTError as exc:
         logger.info("web auth: cookie decode failed: %s", exc)
         return None
@@ -150,8 +156,21 @@ def favicon_ico() -> RedirectResponse:
 # --- F4: auth ---------------------------------------------------------------
 
 
+def _login_not_configured(request: Request) -> HTMLResponse:
+    """Fail closed: a notice in place of the form, with a 503."""
+    logger.error("web login: refused, signing secret not configured")
+    return templates.TemplateResponse(
+        request,
+        "login.html",
+        {"error": None, "not_configured": LOGIN_NOT_CONFIGURED},
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+    )
+
+
 @web_router.get("/login", response_class=HTMLResponse)
 def login_form(request: Request) -> HTMLResponse:
+    if not login_configured():
+        return _login_not_configured(request)
     return templates.TemplateResponse(request, "login.html", {"error": None})
 
 
@@ -162,6 +181,8 @@ def login_submit(
     password: Annotated[str, Form()],
     session: Session = Depends(get_session),
 ) -> HTMLResponse | RedirectResponse:
+    if not login_configured():
+        return _login_not_configured(request)
     user = authenticate(session, email, password)
     if user is None:
         logger.info("web login failed for email=%s", email)
