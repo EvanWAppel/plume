@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -17,6 +18,9 @@ from plume.reservations.router import router as reservations_router
 from plume.spaces.router import router as spaces_router
 from plume.web.router import web_router
 
+logger = logging.getLogger(__name__)
+SEED_PASSWORD_ENV = "PLUME_SEED_OPERATOR_PASSWORD"
+
 
 def _env_flag(name: str) -> bool:
     return os.getenv(name, "").strip().lower() in {"1", "true", "yes", "on"}
@@ -24,11 +28,23 @@ def _env_flag(name: str) -> bool:
 
 @asynccontextmanager
 async def _lifespan(_app: FastAPI) -> AsyncIterator[None]:
-    """Optionally seed demo data on boot (Railway preview sets ``PLUME_SEED_ON_START``)."""
-    if _env_flag("PLUME_SEED_ON_START"):
-        from plume.seed import main as seed_main
+    """Optionally seed demo data on boot (Railway preview sets ``PLUME_SEED_ON_START``).
 
-        seed_main()
+    The demo operator's password comes from ``PLUME_SEED_OPERATOR_PASSWORD``. If
+    that is unset or empty the seed is skipped, so a deploy never gets the
+    public ``plume-dev`` login from the README (PLAT-SEC-01).
+    """
+    if _env_flag("PLUME_SEED_ON_START"):
+        operator_password = os.getenv(SEED_PASSWORD_ENV) or None
+        if operator_password is None:
+            logger.error(
+                "PLUME_SEED_ON_START is set but %s is unset or empty; skipping demo seed",
+                SEED_PASSWORD_ENV,
+            )
+        else:
+            from plume.seed import main as seed_main
+
+            seed_main(operator_password=operator_password)
     yield
 
 

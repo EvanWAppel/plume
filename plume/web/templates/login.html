@@ -8,12 +8,16 @@
     <p class="eyebrow">Behind the scenes</p>
     <h1 id="login-title">Welcome<br><em>back, familiar.</em></h1>
     <p>Operator login. A little order behind the artistry.</p>
+    {% if not_configured %}
+    <p class="error" role="alert">{{ not_configured }}</p>
+    {% else %}
     {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
     <form method="post" action="/login">
       <p><label for="email">Email address</label><input id="email" type="email" name="email" autocomplete="username" placeholder="you@example.com" required /></p>
       <p><label for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" required /></p>
       <button class="button button-wine" type="submit">Log in <span aria-hidden="true">↗</span></button>
     </form>
+    {% endif %}
     <a class="back-link text-link" href="/book">Here to book a station? Right this way ↗</a>
   </section>
 </div>

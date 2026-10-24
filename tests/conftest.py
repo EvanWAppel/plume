@@ -28,6 +28,17 @@ from plume.members.models import Member, Status, Tier
 from plume.spaces.models import Station, Suite
 
 
+@pytest.fixture(autouse=True)
+def signing_secret(monkeypatch: pytest.MonkeyPatch) -> str:
+    """Sign-in fails closed without PLUME_SECRET_KEY (PLAT-SEC-01): set a test key.
+
+    Tests that check the unconfigured path delete or blank it themselves.
+    """
+    key = "test-only-signing-secret-0123456789abcdef"
+    monkeypatch.setenv("PLUME_SECRET_KEY", key)
+    return key
+
+
 @pytest.fixture
 def engine() -> Engine:
     eng = create_engine(
