@@ -47,8 +47,10 @@ N_MEMBERS = 5
 N_RESERVATIONS = 4
 
 OPERATOR_EMAIL = "rory@plume.test"
-# Dev-only password for the demo operator. This is throwaway seed data for a
-# local SQLite file, never a production credential.
+# Dev-only password for the demo operator, used ONLY by the local CLI
+# (``python -m plume.seed``) against a local SQLite file. It is public (it is in
+# the README), so seed-on-start on a deploy never uses it: that path takes the
+# password from PLUME_SEED_OPERATOR_PASSWORD or skips seeding (PLAT-SEC-01).
 OPERATOR_PASSWORD = "plume-dev"  # noqa: S105
 
 # Billing period for the demo monthly run ("YYYY-MM").
@@ -66,7 +68,7 @@ def _empty_summary() -> dict[str, int]:
     }
 
 
-def seed(session: Session) -> dict[str, int]:
+def seed(session: Session, *, operator_password: str = OPERATOR_PASSWORD) -> dict[str, int]:
     """Populate ``session`` with demo data; return a count summary.
 
     Idempotent: if the demo operator already exists, nothing is created and a
@@ -82,7 +84,7 @@ def seed(session: Session) -> dict[str, int]:
     # --- Operator user -------------------------------------------------------
     operator = User(
         email=OPERATOR_EMAIL,
-        hashed_password=hash_password(OPERATOR_PASSWORD),
+        hashed_password=hash_password(operator_password),
         role=Role.OPERATOR,
     )
     session.add(operator)
@@ -174,7 +176,7 @@ def seed(session: Session) -> dict[str, int]:
     return summary
 
 
-def main() -> None:
+def main(*, operator_password: str = OPERATOR_PASSWORD) -> None:
     """Initialize the real DB and seed it, logging a summary."""
     from plume.logging_conf import configure_logging
 
@@ -182,7 +184,7 @@ def main() -> None:
     engine = get_engine()
     init_db(engine)
     with Session(engine) as session:
-        summary = seed(session)
+        summary = seed(session, operator_password=operator_password)
         logger.info("seed complete: %s", summary)
         print(f"Seed complete: {summary}")  # noqa: T201 — CLI feedback
 

@@ -25,8 +25,13 @@ uv sync            # create the venv and install all deps (incl. dev group)
 ## Run the dev server
 
 ```bash
+export PLUME_SECRET_KEY="$(uv run python -c 'import secrets; print(secrets.token_urlsafe(32))')"
 uv run uvicorn plume.main:app --reload
 ```
+
+Sign-in **fails closed**: without `PLUME_SECRET_KEY` the app still serves `/health` and
+public pages, but `/login` and `POST /auth/login` answer 503 "Login not configured" and
+every bearer token or session cookie is refused. There is no built-in default secret.
 
 - Interactive API docs (Swagger UI): <http://127.0.0.1:8000/docs>
 - Health check: <http://127.0.0.1:8000/health> → `{"status": "ok"}`
@@ -36,8 +41,11 @@ uv run uvicorn plume.main:app --reload
 Railpack detects FastAPI via the repo-root `main.py` (`uvicorn main:app` on `$PORT`).
 Set these service variables:
 
-- `PLUME_SECRET_KEY` — JWT signing secret, ≥32 bytes. Do not use the dev default.
-- `PLUME_SEED_ON_START=1` — load demo data on boot if missing (operator `rory@plume.test` / `plume-dev`).
+- `PLUME_SECRET_KEY` — **required.** JWT signing secret, ≥32 bytes. Unset or empty, nobody
+  can sign in (see above).
+- `PLUME_SEED_ON_START=1` — load demo data on boot if missing. The demo operator
+  (`rory@plume.test`) gets its password from `PLUME_SEED_OPERATOR_PASSWORD`; if that is
+  unset or empty the seed is skipped, so a deploy never carries a published password.
 - `PLUME_DATABASE_URL` — optional SQLAlchemy URL; defaults to `sqlite:///plume.db`.
 
 ## Tests, lint, typecheck
@@ -75,6 +83,10 @@ uv run python -m plume.seed
 The seed calls the real service functions (so the data obeys the business rules) and is
 **idempotent** — re-running it is a no-op once the demo operator (`rory@plume.test`)
 exists. To reseed from scratch, delete `plume.db` first.
+
+The local seed signs the demo operator in as `rory@plume.test` / `plume-dev`. That password
+is public, so it is for a local `plume.db` only; deploys seed through
+`PLUME_SEED_OPERATOR_PASSWORD` instead (see Deploy).
 
 ## Continuous integration
 

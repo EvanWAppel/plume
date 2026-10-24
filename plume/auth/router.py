@@ -23,6 +23,8 @@ from plume.auth.service import (
     get_current_user,
     get_optional_user,
     hash_password,
+    login_configured,
+    login_not_configured_exc,
     require_operator,
 )
 from plume.db import get_session
@@ -58,6 +60,9 @@ class UserPublic(BaseModel):
 
 @router.post("/login", response_model=TokenResponse)
 def login(payload: LoginRequest, session: Session = Depends(get_session)) -> TokenResponse:
+    if not login_configured():
+        logger.error("login: refused, signing secret not configured")
+        raise login_not_configured_exc()
     user = authenticate(session, str(payload.email), payload.password)
     if user is None:
         raise HTTPException(
