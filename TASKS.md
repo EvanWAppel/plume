@@ -137,3 +137,12 @@ S1→S2→S3→S4→S5→S6→S7→S8   (Phase 0, sequential, one agent)
 
 ## Progress
 - Phase 0: 8/8 ✅ · X: 5/5 ✅ · A: 5/5 ✅ · B: 5/5 ✅ · C: 5/5 ✅ · D: 5/5 ✅ · E: 5/5 ✅ · F: 4/4 ✅ · G: 3/3 ✅
+
+## Platform (handed off from _system)
+
+Tasks handed to this repo by `~/Documents/_system` (see its `CLAUDE.md`). Do them here.
+
+- [ ] **PLAT-REG-01 — Verify the drafted `project.toml`** _(handed off 2026-10-28)_
+  - **Why:** `_system` builds its registry from each repo's own `project.toml` (its D-003). This one was drafted from the repo's docs, not checked here.
+  - **Change:** check every value against reality (deploy host, domain, auth, DB, paid keys and whether each is isolated + capped); replace any `unknown` you can settle; set `verified = true`; add `PLAT-REG-01` to `[platform] done`.
+  - **Done when:** `cd ~/Documents/_system && uv run sys registry` lists this repo with no errors and state `ok` (or `⚠ guardrail` with the gap recorded in BLOCKED.md).
