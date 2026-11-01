@@ -41,3 +41,15 @@ spend_cap = "n/a"
 
 [platform]
 done = ["PLAT-SEC-01", "PLAT-SEC-02"]   # TASKS.md:105-106 (E6/E7), both [x] on main
+
+[commands]
+setup = "uv sync"
+test = "uv run pytest"
+lint = "uv run ruff check . && uv run ty check"
+
+[fleet]                     # joined 2026-10-31 (_system D-051); also has the `fleet` topic
+component = "plume"
+agents = ["claude", "codex"]
+default_model = "sonnet"
+default_branch = "main"
+max_minutes = 45
